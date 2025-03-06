@@ -78,10 +78,56 @@ public class StackSort {
      */
     private static int[] doStackSort(int data[]) {
 
-    int result[] = new int[data.length];
+        int result[] = new int[data.length];
+        VectorStack<Integer> lowerValues = new VectorStack<>();
+        VectorStack<Integer> upperValues = new VectorStack<>();
 
-        
-    // ADD CODE HERE TO SORT THE ARRAY USING TWO STACKS
+        if (data.length == 0) {
+            return result;
+        }
+        if (data.length == 1) {
+            result[0] = data[0];
+            return result;
+        }
+
+        if (data[0] > data[1]) {
+            upperValues.push(data[0]);
+            lowerValues.push(data[1]);
+        }
+        else {
+            upperValues.push(data[1]);
+            lowerValues.push(data[0]);
+        }
+
+        for (int i = 2; i < data.length; i++) {
+           if (lowerValues.peek() > data[i]) {
+               while (!lowerValues.isEmpty() && lowerValues.peek() > data[i]) {
+                   int temp = lowerValues.pop();
+                   upperValues.push(temp);
+               }
+               lowerValues.push(data[i]);
+               continue;
+           }
+           if (upperValues.peek() < data[i]) {
+               while (!upperValues.isEmpty() && upperValues.peek() < data[i]) {
+                   int temp = upperValues.pop();
+                   lowerValues.push(temp);
+               }
+               upperValues.push(data[i]);
+               continue;
+           }
+           if (upperValues.peek() >= data[i] && lowerValues.peek() <= data[i]) {
+               lowerValues.push(data[i]);
+           }
+        }
+
+        while (!lowerValues.isEmpty()) {
+            int temp = lowerValues.pop();
+            upperValues.push(temp);
+        }
+        for (int i = 0; i < data.length; i++) {
+            result[i] = upperValues.pop();
+        }
 
         return result;
 
