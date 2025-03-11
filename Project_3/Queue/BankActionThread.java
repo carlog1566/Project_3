@@ -65,7 +65,7 @@ public class BankActionThread extends ActionThread
         myLine = new BankLine();
 
         myReport = new Report(myLine);
-        myTeller = new Teller("Fred",maxForService, theEvents, sharedRandom, myLine, myReport);       
+        myTeller = new Teller("Fred",maxForService, theEvents, sharedRandom, myLine, myReport);
         myCG = new CustomerGenerator(maxForInterval, theEvents, sharedRandom, myLine );
         lastEventReport = "No events have been processed";
         
@@ -80,7 +80,19 @@ public class BankActionThread extends ActionThread
 
     public void executeApplication()
     {
-        //ADD CODE HERE TO RUN THE EVENT SIMULATION
+        SimulationEvent currentEvent = null;
+        double timeElapsed = 0.0;
+
+        while (!theEvents.isEmpty() && theEvents.getCurrentTime() <= stopSimulationAt) {
+            if (theEvents.peek() != null) {
+                currentEvent = theEvents.remove();
+                currentEvent.process();
+                lastEventReport = currentEvent.getDescription();
+                nextEventAction = theEvents.peek().getDescription();
+                myReport.updateTime(theEvents.getCurrentTime());
+                animationPause();
+            }
+        }
     }
     
 

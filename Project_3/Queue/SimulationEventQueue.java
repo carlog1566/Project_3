@@ -59,7 +59,7 @@ public class SimulationEventQueue implements SimulationEventQueueInterface
                 // a time greater than our time.
                 foundLarger = check.getTime() > newEvent.getTime();
             }
-            
+
             System.out.println("   pos is " + (pos));
             System.out.println("   foundLarger is " + (foundLarger));
             
