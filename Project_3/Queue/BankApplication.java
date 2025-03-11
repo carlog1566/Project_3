@@ -13,9 +13,8 @@ import javax.swing.*;
 public class BankApplication 
 {
     
-    public static void main (String args[]) 
+    public static void main (String[] args)
     {
-        
         ActionThread myThread = new BankActionThread();     //Change this line for different applications
         AnimatedApplication.startWith(myThread);
     }
