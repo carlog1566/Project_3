@@ -81,7 +81,6 @@ public class BankActionThread extends ActionThread
     public void executeApplication()
     {
         SimulationEvent currentEvent = null;
-        double timeElapsed = 0.0;
 
         while (!theEvents.isEmpty() && theEvents.getCurrentTime() <= stopSimulationAt) {
             if (theEvents.peek() != null) {

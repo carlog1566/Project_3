@@ -40,10 +40,10 @@ public class Teller
         
         //ADD CODE HERE TO GENERATE THE INITIAL EVENT
         int timeToNext = sharedRandomGenerator.nextInt(maxForHelp);
-        SimulationEvent nextGeneration = new CheckForCustomerEvent(
+        SimulationEvent firstServe = new CheckForCustomerEvent(
                 theEventQueue.getCurrentTime()+timeToNext,
                 "Serve the first customer.");
-        theEventQueue.add(nextGeneration);
+        theEventQueue.add(firstServe);
 
         } // end constructor
     
@@ -55,11 +55,9 @@ public class Teller
     synchronized
     public void serve(Customer c)
     {
-        if(serving != null) {
-            serving = c;
-            c.servedAt(theEventQueue.getCurrentTime());
-            reportServices.addServed(c);
-        }
+        serving = c;
+        c.servedAt(theEventQueue.getCurrentTime());
+        reportServices.addServed(c);
     }
     
     // Inherit from the abstract SimulationEvent.  Only the constructor and process need to be defined.
@@ -77,8 +75,11 @@ public class Teller
     	public void process()
     	{
             serving = theLine.getFront();
-            serve(serving);
-            theLine.dequeue();
+            if (serving != null) {
+                serve(serving);
+                theLine.dequeue();
+
+            }
 
             int timeToNext = sharedRandomGenerator.nextInt(maxForHelp);
             SimulationEvent nextServe = new CheckForCustomerEvent(theEventQueue.getCurrentTime()+timeToNext,
