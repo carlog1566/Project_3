@@ -37,8 +37,7 @@ public class Teller
         sharedRandomGenerator = simulationRandomGenerator;
         theLine = servicesLine;
         reportServices = toReportTo;
-        
-        //ADD CODE HERE TO GENERATE THE INITIAL EVENT
+
         int timeToNext = sharedRandomGenerator.nextInt(maxForHelp);
         SimulationEvent firstServe = new CheckForCustomerEvent(
                 theEventQueue.getCurrentTime()+timeToNext,
@@ -74,15 +73,17 @@ public class Teller
     	synchronized
     	public void process()
     	{
-            serving = theLine.getFront();
-            if (serving != null) {
+            if (!theLine.isEmpty()) {
+                serving = theLine.getFront();
                 serve(serving);
                 theLine.dequeue();
-
+            }
+            else {
+                serving = null;
             }
 
             int timeToNext = sharedRandomGenerator.nextInt(maxForHelp);
-            SimulationEvent nextServe = new CheckForCustomerEvent(theEventQueue.getCurrentTime()+timeToNext,
+            SimulationEvent nextServe = new CheckForCustomerEvent(theEventQueue.getCurrentTime() + timeToNext,
                     "Serving the next customer.");
             theEventQueue.add(nextServe);
     	}
